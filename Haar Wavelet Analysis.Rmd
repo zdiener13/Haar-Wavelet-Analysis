@@ -1,0 +1,20 @@
+---
+title: "Haar Wavelet Analysis"
+author: "Zach Diener"
+date: "June 4, 2015"
+output: html_document
+---
+#Background Motivation
+ I will be working to create code that will analyze a signal using Haar Wavelets. I am doing this in order to pick out features of signals that may be used as inputs into a neural network I will construct at a later point. 
+
+```{r}
+
+```
+
+
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
