@@ -45,5 +45,77 @@ Averages$Row_4 <- fRow_3(Averages,Row_4)
 Averages
 
 ```
+Averages=data.frame( Row_1 = c(-12,0,12,16,12,0,-12,-16))
+Row_1 = c(-12,0,12,16,12,0,-12,-16)
+n=length(Row_1)
+i=c(1:(n))
+fRow_1 <- function(Averages,Row_2){
+  Row_2=c()
+  for (i in 1:n){ 
+    if(i==1){Row_2[1]=Row_1[1]*.5} 
+    else {Row_2[i]=(Row_1[i-1]+Row_1[i])*.5}} 
+  return(Row_2)
+  unlist(Row_2)}
+Averages$Row_2 <- fRow_1(Averages,Row_2)
 
+fRow_2 <- function(Averages,Row_3){
+  Row_3=c()
+  Row_2=Averages$Row_2
+  for (i in 1:n){ 
+    if(i==1||i==2){Row_3[i]=Row_2[i]*.5} 
+    #print(Row_3) 
+    else {Row_3[i]=(Row_2[i-2]+Row_2[i])*.5}} 
+  return(Row_3)}
+Averages$Row_3 <- fRow_2(Averages,Row_3)
+
+fRow_3 <- function(Averages,Row_4){
+  Row_4=c()
+  Row_3=Averages$Row_3
+  for (i in 1:n){ 
+    if(i==1||i==2||i==3||i==4){Row_4[i]=Row_3[i]*.5} 
+    #print(Row_4) 
+    else {Row_4[i]=(Row_3[i-4]+Row_3[i])*.5}} 
+  return(Row_4)}
+Averages$Row_4 <- fRow_3(Averages,Row_4)
+
+Averages
+
+```
+#Modeling the Differences function/table
+```{r}
+
+Row_1 = c(-12,0,12,16,12,0,-12,-16)
+fdRow_1 <- function(Averages,Row_1){
+  dRow_1=c()
+  for (i in 1:n){ 
+    if(i==1){dRow_1[1]=Row_1[1]*-.5} 
+    else {dRow_1[i]=(Row_1[i-1]-Row_1[i])*.5}} 
+  return(dRow_1)
+  unlist(dRow_1)}
+dRow_1=fdRow_1(Averages,Row_1)
+Differences=data.frame(dRow_1=c(dRow_1))
+
+fdRow_2 <- function(Averages,Row_2){
+  dRow_2=c()
+  Row_2=Averages$Row_2
+  for (i in 1:n){ 
+    if(i==1||i==2){dRow_2[i]=Row_2[i]*-.5} 
+    else {dRow_2[i]=(Row_2[i-2]-Row_2[i])*.5}} 
+  return(dRow_2)
+  unlist(dRow_2)}
+dRow_2=fdRow_2(Averages,Row_2)
+Differences$dRow_2<-dRow_2
+
+fdRow_3 <- function(Averages,Row_3){
+  dRow_3=c()
+  Row_3=Averages$Row_3
+  for (i in 1:n){ 
+    if(i==1||i==2||i==3||i==4){dRow_3[i]=Row_3[i]*-.5} 
+    else {dRow_3[i]=(Row_3[i-4]-Row_3[i])*.5}} 
+  return(dRow_3)
+  unlist(dRow_3)}
+dRow_3=fdRow_3(Averages,Row_3)
+Differences$dRow_3<-dRow_3
+Differences
+```
 
