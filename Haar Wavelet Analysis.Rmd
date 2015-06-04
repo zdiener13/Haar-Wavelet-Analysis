@@ -9,27 +9,8 @@ output: html_document
 
 #Attempt to model the table in Enhanced Brain Wave Analysis 
 ```{r}
-n=length(Row_1)
-i=c(1:(n-1))
-Row_1=as.numeric(list(-12,0,12,16,12,0,-12,-16))
-fRow_2=function(Row_1){(Row_1[i]+ Row_1[i+1])*.5}
-Row_2=fRow_2(Row_1)
-fRow_3=function(Row_2){(Row_2[i]+Row_2[i+2])*.5}
-Row_3=fRow_3(Row_2)
-fRow_4=function(Row_3){(Row_3[i]+Row_3[i+4])*.5}
-Row_4=fRow_4(Row_3)
-
-Row_1A-1
-Row_2
-Row_3
-Row_4
-
-```
-
-
-
-```{r}
 Averages=data.frame( Row_1 = c(-12,0,12,16,12,0,-12,-16))
+Row_1 = c(-12,0,12,16,12,0,-12,-16)
 n=length(Row_1)
 i=c(1:(n))
 fRow_1 <- function(Averages,Row_2){
@@ -39,9 +20,7 @@ fRow_1 <- function(Averages,Row_2){
     else {Row_2[i]=(Row_1[i-1]+Row_1[i])*.5}} 
   return(Row_2)
   unlist(Row_2)}
-fRow_1(Averages,Row_2)
 Averages$Row_2 <- fRow_1(Averages,Row_2)
-
 
 fRow_2 <- function(Averages,Row_3){
   Row_3=c()
