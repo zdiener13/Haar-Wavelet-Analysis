@@ -93,10 +93,32 @@ I believe that as my code stands various other sets of data may be analyzed rega
 ```{r}
 z=ncol(Differences)
 j=c(1:(z))
-#fDiffScaled=function(Differences){
-  #Differences[z,i]*(4/(2^j))}
-#DiffScaled=fDiffScaled(Differences)
-#DiffScaled
 DiffScaled<- as.matrix(Differences)
-heatmap(DiffScaled, col = cm.colors(256), scale= "column", Rowv = NA, Colv = NA, labCol= "Frequency" )
+
+frow_labels <- function(j){(1/(2^j))*(1/sqrt(2))}
+row_labels <-c(frow_labels(j,options(digits=10)))
+row_labels
+
+heatmap.2(t(DiffScaled),
+  main = "Features Heatmap",
+  xlab = "Time",
+  ylab = "Frequency",
+  key=T, 
+  keysize=1.5, 
+  key.title = NA,
+  symkey=TRUE,
+  notecol="black",            
+  density.info="histogram",     
+  trace="none",               
+  margins =c(12,9),            
+  dendrogram="none",           
+  Rowv = FALSE,
+  Colv = FALSE,
+  srtCol = 1,
+  labRow = row_labels,
+  cexRow = 1.0,
+  breaks=50,
+  adjCol = c(0.5,1)
+  )       
+
 ```
