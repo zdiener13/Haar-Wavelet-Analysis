@@ -89,3 +89,14 @@ Differences
 ```
 I believe that as my code stands various other sets of data may be analyzed regardless of their size. The first row of the averages must be input to begin this process. 
 
+#Creating Heatmaps
+```{r}
+z=ncol(Differences)
+j=c(1:(z))
+#fDiffScaled=function(Differences){
+  #Differences[z,i]*(4/(2^j))}
+#DiffScaled=fDiffScaled(Differences)
+#DiffScaled
+DiffScaled<- as.matrix(Differences)
+heatmap(DiffScaled, col = cm.colors(256), scale= "column", Rowv = NA, Colv = NA, labCol= "Frequency" )
+```
