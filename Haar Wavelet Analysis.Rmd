@@ -2,7 +2,7 @@
 title: "Haar Wavelet Analysis"
 author: "Zach Diener"
 date: "June 4, 2015"
-output: html_document
+output: pdf_document
 ---
 #Background Motivation
  I will be working to create code that will analyze a signal using Haar Wavelets. I am doing this in order to pick out features of signals that may be used as inputs into a neural network I will construct at a later point. 
@@ -95,7 +95,7 @@ z=ncol(Differences)
 j=c(1:(z))
 DiffScaled<- as.matrix(Differences)
 
-frow_labels <- function(j){(1/(2^j))*(1/sqrt(2))}
+frow_labels <- function(j){(1/(2^j))}
 row_labels <-c(frow_labels(j))
 row_labels<-round(row_labels,3)
 
@@ -120,5 +120,17 @@ heatmap.2(t(DiffScaled),
   breaks=50,
   adjCol = c(0.5,1)
   )       
+
+```
+#Plotting Wavelets 
+```{r}
+tt <- seq(0,8, by=1)
+Signal<- stepfun(1:7,Row_1, f=0)
+ plot.stepfun(Signal,
+              main= "Signal"
+              verticals = FALSE,
+              xval=tt
+              )
+
 
 ```
