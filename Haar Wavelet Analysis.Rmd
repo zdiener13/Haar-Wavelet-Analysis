@@ -96,8 +96,8 @@ j=c(1:(z))
 DiffScaled<- as.matrix(Differences)
 
 frow_labels <- function(j){(1/(2^j))*(1/sqrt(2))}
-row_labels <-c(frow_labels(j,options(digits=10)))
-row_labels
+row_labels <-c(frow_labels(j))
+row_labels<-round(row_labels,3)
 
 heatmap.2(t(DiffScaled),
   main = "Features Heatmap",
