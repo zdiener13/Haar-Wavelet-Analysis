@@ -87,7 +87,7 @@ dRow_3=fdRow_3(Averages,Row_3)
 Differences$dRow_3<-dRow_3
 Differences
 ```
-I believe that as my code stands various other sets of data may be analyzed regardless of their size. The first row of the averages must be input to begin this process. 
+
 
 #Creating Heatmaps
 ```{r}
