@@ -11,13 +11,13 @@ I will be taking the code previously written on Haar Wavelet analysis, and modif
 #Code
 ```{r}
 #input number of frequency bands
-j= c(1:4)
+j= c(1:5)
 
 #input the original signal 
 s <- c(8,20,32,36,32,20,8,4)
-Averages = matrix(0,length(s),length(j))
+Averages = matrix(0,length(j),length(s))
 
-Averages<-t(Averages)
+#Averages<-t(Averages)
 rownames(Averages) <- 0: (nrow(Averages)-1)
 colnames(Averages) <- 1:ncol(Averages)
 Averages[1,] <- s
@@ -25,28 +25,42 @@ Averages[1,] <- s
 nrows <- nrow(Averages)
 
 #Calculate Averages
-for (j in 1:(nrows)-1){
-  for (n in (2^j):length(s)){
-   Averages[(j+1),n] <- mean(Averages[1, (n-((2^j)-1)):n]) 
+for (j in 1:((nrows)-1)){
+  for (n in (2*j):length(s)){
+    #print(Averages[1, (n-(((2*j)-1)):n)])
+   Averages[(j+1),n] <- mean(Averages[1, (n-((2*j)-1)):n]) 
     }
   }
 
 #Calculate Differences
+Differences <- matrix(c(0),nrow(Averages)-1,ncol(Averages))
 
-Differences <- matrix(c(0),nrow(Averages),ncol(Averages))
-
-for (j in 1:(nrows-1)){
-  for (n in 2^(j):length(s)){
-    Differences[(j+1),n] <- (Averages[(j),n]-Averages[(j),n-(2^(j-1))])/2
+for (j in 1:((nrows)-1)){
+  for (n in (2*(j)):length(s)){
+    #print(Averages[(j),n])
+    #print(Averages[(j),(n-j)])
+    Differences[(j),n] <- (Averages[j,n]-Averages[j,(n-j)])/2
   }
 }
-
-
-
-
 
 ```
 
 
 ```{r}
+#Daubechies Wavelets
+
+for(n in 2:8){
+  Differences[1,n] <-(Averages[1,n]-Averages[1,(n-1)])/2
+}
+for(n in 4:8){
+  Differences[2,n] <-(Averages[2,n]-Averages[2,(n-2)])/2
+}
+for(n in 6:8){
+Differences[3,n] <- (Averages[3,n] - Averages[3, (n-3)])/2
+}
+for(n in 8:8){
+ Differences[4,n] <-(Averages[4,n]-Averages[3,(n-4)])/2
+}
+
+
 ```

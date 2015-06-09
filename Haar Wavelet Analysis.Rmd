@@ -126,11 +126,25 @@ heatmap.2(t(DiffScaled),
 ```{r}
 tt <- seq(0,8, by=1)
 Signal<- stepfun(1:7,Row_1, f=0)
- plot.stepfun(Signal,
+
+plot.new()
+
+plot.window(xlim = c(0,8), ylim = c(-16,16))
+
+plot.stepfun(Signal,
               main= "Signal",
               verticals = FALSE,
+              do.points = FALSE,
               xval=tt)
+ 
+Avg<- stepfun(1:7,Averages$Row_2, f=.5)
 
-
+plot.stepfun(Avg,
+              main= "Signal",
+              verticals = FALSE,
+              do.points = FALSE,
+              add = TRUE,
+              col = "red",
+              xval=tt)
 ```
 
