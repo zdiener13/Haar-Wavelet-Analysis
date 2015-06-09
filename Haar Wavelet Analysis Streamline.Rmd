@@ -1,0 +1,107 @@
+---
+title: "Haar Wavelet Analysis Generalization"
+author: "Zach Diener"
+date: "June 8, 2015"
+output: html_document
+---
+#Background Motivation
+
+I will be taking the code previously written on Haar Wavelet analysis, and modifying is so that it may be generally applicable to a range of data sets.
+
+#Code
+```{r}
+#input number of frequency bands
+j= c(1:4)
+
+#input the original signal 
+s <- c(8,20,32,36,32,20,8,4)
+Averages = matrix(0,length(s),length(j))
+
+Averages<-t(Averages)
+rownames(Averages) <- 0: (nrow(Averages)-1)
+colnames(Averages) <- 1:ncol(Averages)
+Averages[1,] <- s
+
+nrows <- nrow(Averages)
+
+#Calculate Averages
+for (j in 1:(nrows)-1){
+  for (n in (2^j):length(s)){
+   Averages[(j+1),n] <- mean(Averages[1, (n-((2^j)-1)):n]) 
+    }
+  }
+
+#Calculate Differences
+
+Differences <- matrix(c(0),nrow(Averages),ncol(Averages))
+
+for (j in 1:(nrows-1)){
+  for (n in 2^(j):length(s)){
+    Differences[(j+1),n] <- (Averages[(j),n]-Averages[(j),n-(2^(j-1))])/2
+  }
+}
+
+
+
+
+
+```
+```{r}
+
+
+fRow <- function(Averages){
+  Row_2=c()
+  for (i in 1:ncol(Averages)){ 
+    if(i==1){Row_2[1]=Averages[0,1]*.5} 
+    else {Row_2[i]=(Row_1[i-1]+Row_1[i])*.5}} 
+  return(Row_2)
+  }
+Row_2 <- fRow_1(Averages)
+
+
+
+
+Rows <- c()
+fAvg <- function(Averages)
+    {(Averages[nrow(Averages)-1,i-1]+Averages[nrow(Averages)-1,i])/2}
+Rows <- for (i in 2:8){
+  fAvg(Averages)
+print(fAvg(Averages))
+}
+
+n=c(1: length(s))
+
+for(n in 2:8){
+  Differences[2,n] <-(Averages[1,n]-Averages[1,(n-1)])/2
+}
+for(n in 4:8){
+  Differences[3,n] <-(Averages[2,n]-Averages[2,(n-2)])/2
+}
+for(n in 8:8){
+  Differences[4,n] <-(Averages[3,n]-Averages[3,(n-4)])/2
+}
+
+
+
+#fn=function(j){1:ncol(Averages)*2^(j)}
+#n=mapply(fn,j)
+#n=t(n)
+
+#Build function for Averages
+#for (n in 2:8) {
+ # Averages[2,n] <- (Averages[1,n-1]+Averages[1,n])/2
+#}
+
+#for (n in 4:8){
+ # Averages[3,n] <- mean(Averages[1,(n-3):n])
+#}
+
+#for (n in 8:8){
+ # Averages[4,n] <- mean(Averages[1,(n-7):n])
+#}
+
+
+#for (n in (2*j):length(s)){
+ # Averages[(j+1),n] <- mean(Averages[1, (n-((2*j)-1)):n])
+#}
+```
