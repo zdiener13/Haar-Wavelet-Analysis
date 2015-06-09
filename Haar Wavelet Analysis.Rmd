@@ -127,10 +127,10 @@ heatmap.2(t(DiffScaled),
 tt <- seq(0,8, by=1)
 Signal<- stepfun(1:7,Row_1, f=0)
  plot.stepfun(Signal,
-              main= "Signal"
+              main= "Signal",
               verticals = FALSE,
-              xval=tt
-              )
+              xval=tt)
 
 
 ```
+
