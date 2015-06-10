@@ -37,9 +37,7 @@ Differences <- matrix(c(0),nrow(Averages)-1,ncol(Averages))
 
 for (j in 1:((nrows)-1)){
   for (n in (2*(j)):length(s)){
-    #print(Averages[(j),n])
-    #print(Averages[(j),(n-j)])
-    Differences[(j),n] <- (Averages[j,n]-Averages[j,(n-j)])/2
+    Differences[(j),n] <- (-1)*((mean(Averages[1, (n-((2*j)-1)):(n-j)])-mean(Averages[1, (n-(j)+1):n]))/2)
   }
 }
 
@@ -49,18 +47,6 @@ for (j in 1:((nrows)-1)){
 ```{r}
 #Daubechies Wavelets
 
-for(n in 2:8){
-  Differences[1,n] <-(Averages[1,n]-Averages[1,(n-1)])/2
-}
-for(n in 4:8){
-  Differences[2,n] <-(Averages[2,n]-Averages[2,(n-2)])/2
-}
-for(n in 6:8){
-Differences[3,n] <- (Averages[3,n] - Averages[3, (n-3)])/2
-}
-for(n in 8:8){
- Differences[4,n] <-(Averages[4,n]-Averages[3,(n-4)])/2
-}
 
 
 ```
