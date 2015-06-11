@@ -43,10 +43,52 @@ for (j in 1:((nrows)-1)){
 
 ```
 
-
-```{r}
 #Daubechies Wavelets
+```{r}
+#First Iteration
+#declare signal
+s <- c(8,20,32,36,32,20,8,4)
+
+#designate level, transform method, 
+Sd4.dwt <- wt.filter(filter="d4", level=1)
+str(Sd4.dwt)
+
+#run the forward D4 transform
+wt.dwt <- dwt.forward(s, Sd4.dwt)
+str(wt.dwt)
+
+#dwt(s, filter=Sd4.dwt, n.levels = 2 , boundary="periodic", fast=TRUE)
+dwt(s, filter=c(g3,g2,g1,g0), n.levels = 2 , boundary="periodic", fast=TRUE)
+
+#reconstruct signal from scaling/ wavelet coeffiecients 
+newS.dwt <- dwt.backward(wt.dwt$W, wt.dwt$V, Sd4.dwt)
+
+
+#designate level, transform method, 
+Sd4.dwt <- wt.filter(filter="d4", level=2)
+
+
+#run the forward D4 transform
+wt.dwt_1 <- dwt.forward(wt.dwt$V, Sd4.dwt)
 
 
 
+
+h0 <- (1+sqrt(3))/(4*sqrt(2))
+h1 <- (3+sqrt(3))/(4*sqrt(2))
+h2 <- (3-sqrt(3))/(4*sqrt(2))
+h3 <- (1-sqrt(3))/(4*sqrt(2))
+
+g0 <- h3
+g1 <- -h2
+g2 <- h1
+g3 <- -h0
+
+w_1 <- matrix(c(h3,h2,h1,h0,0,0,0,0,0,0,h3,h2,h1,h0,0,0,0,0,0,0,h3,h2,h1,h0,h1,h0,0,0,0,0,h3,h2,g3,g2,g1,g0,0,0,0,0,0,0,g3,g2,g1,g0,0,0,0,0,0,0,g3,g2,g1,g0,g1,g0,0,0,0,0,g3,g2),8,8, byrow = T)
+
+w_2 <- matrix(c(h3,h2,h1,h0,0,0,0,0,h1,h0,h3,h2,0,0,0,0,g3,g2,g1,g0,0,0,0,0,g1,g0,g3,g2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1),8,8, byrow = T)
+
+s <- matrix(c(8,20,32,36,32,20,8,4),8,1)
+
+p_other <- w_2 %*% w_1 %*% s
 ```
