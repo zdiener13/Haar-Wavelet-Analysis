@@ -50,7 +50,7 @@ for (j in 1:((nrows)-1)){
 s <- c(8,20,32,36,32,20,8,4)
 
 #designate level, transform method, 
-Sd4.dwt <- wt.filter(filter="d4", level=1)
+Sd4.dwt <- wt.filter(filter="d4", level=2)
 str(Sd4.dwt)
 
 #run the forward D4 transform
@@ -107,4 +107,7 @@ accessD (Sd4_1.obj, level = 1, boundary = T)
 
 accessC (Sd4_1.obj, level = 0, boundary = T)
 accessD (Sd4_1.obj, level = 0, boundary = T)
+
+#W2<- t(GenW(n=8, filter.number=2, family = "DaubExPhase"))
+
 ```
