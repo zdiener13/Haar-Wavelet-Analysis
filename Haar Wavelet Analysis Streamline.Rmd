@@ -43,7 +43,7 @@ for (j in 1:((nrows)-1)){
 
 ```
 
-#Daubechies Wavelets
+#Daubechies Wavelets (pkg: Wavelets)
 ```{r}
 #First Iteration
 #declare signal
@@ -57,23 +57,17 @@ str(Sd4.dwt)
 wt.dwt <- dwt.forward(s, Sd4.dwt)
 str(wt.dwt)
 
-#dwt(s, filter=Sd4.dwt, n.levels = 2 , boundary="periodic", fast=TRUE)
-dwt(s, filter=c(g3,g2,g1,g0), n.levels = 2 , boundary="periodic", fast=TRUE)
-
 #reconstruct signal from scaling/ wavelet coeffiecients 
 newS.dwt <- dwt.backward(wt.dwt$W, wt.dwt$V, Sd4.dwt)
 
-
-#designate level, transform method, 
-Sd4.dwt <- wt.filter(filter="d4", level=2)
-
-
-#run the forward D4 transform
+#run the forward D4 transform 2nd Time
 wt.dwt_1 <- dwt.forward(wt.dwt$V, Sd4.dwt)
 
 
 
-
+```
+#Daubechies Wavelets (By hand matrix calculation)
+```{r}
 h0 <- (1+sqrt(3))/(4*sqrt(2))
 h1 <- (3+sqrt(3))/(4*sqrt(2))
 h2 <- (3-sqrt(3))/(4*sqrt(2))
@@ -91,4 +85,26 @@ w_2 <- matrix(c(h3,h2,h1,h0,0,0,0,0,h1,h0,h3,h2,0,0,0,0,g3,g2,g1,g0,0,0,0,0,g1,g
 s <- matrix(c(8,20,32,36,32,20,8,4),8,1)
 
 p_other <- w_2 %*% w_1 %*% s
+```
+
+
+#Daubechies Wavelets (pkg: Wavethresh)
+```{r}
+s <- matrix(c(8,20,32,36,32,20,8,4),8,1)
+
+Sd4_1.obj <- wd(data=s, filter.number=2, family="DaubExPhase",
+type="wavelet", bc="periodic", verbose=FALSE)
+
+Sd4_1.obj
+
+filter.select(filter.number = 2, family = "DaubExPhase", constant = 1)
+
+accessC (Sd4_1.obj, level = 2, boundary = T)
+accessD (Sd4_1.obj, level = 2, boundary = T)
+
+accessC (Sd4_1.obj, level = 1, boundary = T)
+accessD (Sd4_1.obj, level = 1, boundary = T)
+
+accessC (Sd4_1.obj, level = 0, boundary = T)
+accessD (Sd4_1.obj, level = 0, boundary = T)
 ```
