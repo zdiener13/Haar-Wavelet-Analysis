@@ -93,7 +93,7 @@ p_other <- w_2 %*% w_1 %*% s
 s <- matrix(c(8,20,32,36,32,20,8,4),8,1)
 
 Sd4_1.obj <- wd(data=s, filter.number=2, family="DaubExPhase",
-type="wavelet", bc="periodic", verbose=FALSE)
+type="wavelet", bc="periodic", verbose=T)
 
 Sd4_1.obj
 
@@ -107,6 +107,12 @@ accessD (Sd4_1.obj, level = 1, boundary = T)
 
 accessC (Sd4_1.obj, level = 0, boundary = T)
 accessD (Sd4_1.obj, level = 0, boundary = T)
+
+
+plot(1:10)
+
+draw.default(filter.number =2,family = "DaubExPhase", enhance= FALSE, main= "Wavelet")
+draw.default(filter.number =2,family = "DaubExPhase", enhance= FALSE,scaling.function = TRUE, main= "Wavelet")
 
 #W2<- t(GenW(n=8, filter.number=2, family = "DaubExPhase"))
 

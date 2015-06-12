@@ -1,0 +1,138 @@
+---
+title: "Synthetic Bean Beetle Signals"
+author: "Paul Pearson"
+date: "June 11, 2015"
+output: html_document
+---
+
+# Generating simulation data
+
+```{r}
+# From Dropbox folder image_processing/Seaweed/Seaweed_Test.R
+#Seaweed Test Program
+#David McMorris
+#07/16/13≈
+
+library(wavethresh)
+library(gplots)
+library(wavelets)
+
+rm(list=ls())	#Clear data
+#graphics.off()	#Close Graphics Devices
+
+sds<-sample(rep(c(0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0),30))	#Generate random list of standard deviations
+TestCases<-data.frame(matrix(NA,nrow=330,ncol=70))	#Create empty data frame to store simulated signals
+NoiseSeeds<-data.frame(matrix(NA,nrow=330,ncol=626))	#Create empty data frame to store state of RNG before each injection of noise
+SD_Change<-data.frame(matrix(NA,nrow=330,ncol=2))	#Create empty data frame to store standard deviations and transition points
+colnames(SD_Change)<-c("sd","change")	#Name columns 
+x<-(1:70)	#Create vector of values from 1 to 70
+for(i in 1:330){	#Loop over all standard deviations
+		change1<-sample(25:55,1)	#Randomly select transition point between 25 and 55
+		NoiseSeeds[i,]<-.Random.seed	#Store state of RNG
+		TestCases[i,(1:70)]<-(((x>=1 & x<(change1-25))*0)+((x>=(change1-25) & x<(change1-10))*((0.02*x)+0.5-(0.02*change1)))+((x>=(change1-10) & x<(change1-6))*(x+10.3-change1))+((x>=(change1-6) & x<(change1))*(4.3))+((x>=(change1) & x<(change1+10))*((-0.5*x)+4.3+(0.5*change1)))+((x>=(change1+10) & x<=(change1+15))*((-0.25*x)+1.8+(0.25*change1)))+((x>(change1+15) & x<=1000)*(-1.95)))+rnorm(length(x),sd=sds[i])+20	#Inject noise into base signal and store
+	#	TestCases[i,71]<-paste(";",(i),sep="")	#Label signal for later identification
+		SD_Change[i,"change"]<-change1	#Store transition point
+}	#End loop
+SD_Change[,"sd"]<-sds	#Store standard deviation of injected noise
+write.csv(NoiseSeeds,row.names=FALSE,"./NoiseSeeds.csv")	#Save output
+write.csv(TestCases,row.names=FALSE,"./TestCases.csv")	#Save output
+write.csv(SD_Change,row.names=FALSE,"./SD_Change.csv")	#Save output
+```
+
+
+```{r}
+
+df <- as.data.frame(t(read.csv("TestCases.csv", header=T)))
+
+plot(df[,100], main = "Simulation Data", xlab= "Time", ylab="Brightness Level", xlim=c(0,70), ylim= c(14,28),type = "l")
+lines(df[,200], col = "red")
+lines(df[,300], col="green")
+
+```
+#Wavelet Transform 
+```{r}
+#due to the sitpulations of wavethresh we need to truncate the data to contain 2^j points. 
+
+df_300 <- df[,300]
+s<-matrix(0,1,70)
+s[1,]<- df_300
+
+
+Sd4_1.obj <- wd(data=s[,1:64], filter.number=2, family="DaubExPhase",
+type="wavelet", bc="periodic", verbose=T)
+
+#accessC (Sd4_1.obj, level = 5, boundary = T)
+D_1<-accessD (Sd4_1.obj, level = 5, boundary = T)
+
+#accessC (Sd4_1.obj, level = 4, boundary = T)
+D_2<-accessD (Sd4_1.obj, level = 4, boundary = T)
+
+#accessC (Sd4_1.obj, level = 3, boundary = T)
+D_3 <-accessD (Sd4_1.obj, level = 3, boundary = T)
+
+#accessC (Sd4_1.obj, level = 2, boundary = T)
+D_4 <- accessD (Sd4_1.obj, level = 2, boundary = T)
+
+#accessC (Sd4_1.obj, level = 1, boundary = T)
+D_5 <- accessD (Sd4_1.obj, level = 1, boundary = T)
+
+#accessC (Sd4_1.obj, level = 0, boundary = T)
+D_6 <- accessD (Sd4_1.obj, level = 0, boundary = T)
+
+#Diff <- c(accessD (Sd4_1.obj, level = 5, boundary = T),accessD (Sd4_1.obj, level = 4, boundary = T),accessD (Sd4_1.obj, level = 3, boundary = T),accessD (Sd4_1.obj, level = 2, boundary = T),accessD (Sd4_1.obj, level = 1, boundary = T),accessD (Sd4_1.obj, level = 0, boundary = T),accessC (Sd4_1.obj, level = 0, boundary = T))
+```
+#Plotting Heatmap
+```{r}
+D1_6<-rep(D_6,32)
+D1_5 <-rep(D_5,16)
+D1_4 <-rep(D_4,8)
+D1_3 <-rep(D_3,4)
+D1_2 <-rep(D_2,2)
+
+D1_5 <- D1_5[order(match(D1_5,D_5))]
+D1_4 <- D1_4[order(match(D1_4,D_4))]
+D1_3 <- D1_3[order(match(D1_3,D_3))]
+D1_2 <- D1_2[order(match(D1_2,D_2))]
+
+D1_2<-sapply(D_2,rep,2)
+as.vector(D1_2)
+
+HM<- matrix(0,6,32)
+HM[1,]<-D_1
+HM[2,]<-D1_2
+HM[3,]<-D1_3
+HM[4,]<-D1_4
+HM[5,]<-D1_5
+HM[6,]<-D1_6
+
+HM<- abs(HM)
+
+heatmap.2(HM,
+  main = "Heatmap ",
+  xlab = "Time",
+  ylab = "Frequency",
+  key=T, 
+  keysize=1.5, 
+  key.title = NA,
+  symkey=TRUE,
+  notecol="black",            
+  density.info="histogram",     
+  trace="none",               
+  margins =c(4,3),            
+  dendrogram="none",           
+  Rowv = FALSE,
+  Colv = FALSE,
+  srtCol = 1,
+  cexRow = 1.0,
+  breaks= 63,
+  adjCol = c(0.5,1),
+  col= grey.colors(62, start= 0.9, end=0.1, gamma=.7)
+  )
+
+```
+
+#Plotting Wavelets and Scaling Function
+```{r}
+draw.default(filter.number =2,family = "DaubExPhase", enhance= FALSE, main= "Wavelet")
+draw.default(filter.number =2,family = "DaubExPhase", enhance= FALSE,scaling.function = TRUE, main= "Wavelet Scaling")
+```
